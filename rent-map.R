@@ -8,7 +8,8 @@ median_rent <- get_acs(
   #variables = "DP04_0134",
   variables = "B25064_001",
   year = 2023,
-  state = c(state.abb, "DC", "PR"),
+  state = "TX",
+  county = c("Travis","Hays", "Williamson", "Bastrop", "Caldwell"),
   geometry = TRUE,
   resolution = "5m",
 )
@@ -17,18 +18,10 @@ median_rent_county <- get_acs(
   geography = "county",
   variables = "B25064_001",
   year = 2023,
-  state = c(state.abb, "DC", "PR"),
+  state = "TX",
+  county = c("Travis","Hays", "Williamson", "Bastrop", "Caldwell"),
   geometry = TRUE,
   resolution = "5m",
-)
-
-us_income <- get_acs(
-  geography = "tract",
-  variables = "B19013_001",
-  state = c(state.abb, "DC", "PR"),
-  year = 2023,
-  geometry = TRUE,
-  resolution = "5m"
 )
 
 
@@ -50,8 +43,8 @@ median_rent_county$popup <- county_popup_content
 
 rent_map <- maplibre(
   style = carto_style("positron"),
-  center = c(-98.5795, 39.8283),
-  zoom = 3
+  center = c(-97.72888, 30.27567),
+  zoom = 7.5
 ) |>
   set_projection("globe") |> 
   add_source( 
@@ -69,7 +62,7 @@ rent_map <- maplibre(
       na_color = "lightgrey"
     ),
     fill_opacity = 0.7,
-    min_zoom = 8,
+    min_zoom = 9,
     #tooltip = "estimate",
     hover_options = list(
       fill_color = "magenta",
@@ -87,7 +80,7 @@ rent_map <- maplibre(
       na_color = "lightgrey"
     ),
     fill_opacity = 0.7,
-    max_zoom = 7.99,
+    max_zoom = 8.99,
     #tooltip = "estimate",
     hover_options = list(
       fill_color = "magenta",
