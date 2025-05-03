@@ -3,13 +3,16 @@ library(tidycensus)
 library(mapgl)
 library(sf)
 
+austin_counties <- c("Travis","Hays", "Williamson", "Bastrop", "Caldwell")
+capcog_counties <- c("Bastrop", "Blanco", "Burnet", "Caldwell", "Lee", "Fayette", "Hays", "Llano", "Travis", "Williamson")
+
 median_rent <- get_acs(
   geography = "tract",
   #variables = "DP04_0134",
   variables = "B25064_001",
   year = 2023,
   state = "TX",
-  county = c("Travis","Hays", "Williamson", "Bastrop", "Caldwell"),
+  county = capcog_counties,
   geometry = TRUE,
   resolution = "5m",
 )
@@ -19,7 +22,7 @@ median_rent_county <- get_acs(
   variables = "B25064_001",
   year = 2023,
   state = "TX",
-  county = c("Travis","Hays", "Williamson", "Bastrop", "Caldwell"),
+  county = capcog_counties,
   geometry = TRUE,
   resolution = "5m",
 )
@@ -32,7 +35,7 @@ tract_popup_content <- glue::glue(
 )
 
 tract_hover_content <- glue::glue(
-  "Median Gross Rent: {scales::dollar_format()(median_rent$estimate)}"
+  "{scales::dollar_format()(median_rent$estimate)}"
 )
 
 median_rent$popup <- tract_popup_content
@@ -44,7 +47,7 @@ county_popup_content <- glue::glue(
 )
 
 county_hover_content <- glue::glue(
-  "Median Gross Rent: {scales::dollar_format()(median_rent_county$estimate)}"
+  "{scales::dollar_format()(median_rent_county$estimate)}"
 )
 
 median_rent_county$popup <- county_popup_content
