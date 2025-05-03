@@ -31,14 +31,24 @@ tract_popup_content <- glue::glue(
   "Median Gross Rent: {scales::dollar_format()(median_rent$estimate)}"
 )
 
+tract_hover_content <- glue::glue(
+  "Median Gross Rent: {scales::dollar_format()(median_rent$estimate)}"
+)
+
 median_rent$popup <- tract_popup_content
+median_rent$hover <- tract_hover_content
 
 county_popup_content <- glue::glue(
   "<strong>{median_rent_county$NAME}</strong><br>",
   "Median Gross Rent: {scales::dollar_format()(median_rent_county$estimate)}"
 )
 
+county_hover_content <- glue::glue(
+  "Median Gross Rent: {scales::dollar_format()(median_rent_county$estimate)}"
+)
+
 median_rent_county$popup <- county_popup_content
+median_rent_county$hover <- county_hover_content
 
 
 rent_map <- maplibre(
@@ -63,7 +73,7 @@ rent_map <- maplibre(
     ),
     fill_opacity = 0.7,
     min_zoom = 9,
-    #tooltip = "estimate",
+    tooltip = "hover",
     hover_options = list(
       fill_color = "magenta",
       fill_opacity = 1
@@ -75,13 +85,13 @@ rent_map <- maplibre(
     source = median_rent_county,
     fill_color = interpolate(
       column = "estimate",
-      values = c(500, 1500, 2000, 2500, 3000),
+      values = c(500, 1000, 1500, 2000, 2500),
       stops = c("#2b83ba", "#abdda4", "#ffffbf", "#fdae61", "#d7191c"),
       na_color = "lightgrey"
     ),
     fill_opacity = 0.7,
     max_zoom = 8.99,
-    #tooltip = "estimate",
+    tooltip = "hover",
     hover_options = list(
       fill_color = "magenta",
       fill_opacity = 1
@@ -90,7 +100,7 @@ rent_map <- maplibre(
   ) |>
   add_continuous_legend(
     "Median household income",
-    values = c("$500", "$1.5k", "$2k", "2.5k", "$3k"),
+    values = c("$500", "$1k", "$1.5k", "2k", "$2.5k"),
     colors = c("#2b83ba", "#abdda4", "#ffffbf", "#fdae61", "#d7191c")
   )
 
