@@ -102,7 +102,7 @@ rent_map <- maplibre(
     popup = "popup"
   ) |>
   add_continuous_legend(
-    "Median household income",
+    "Median gross rent",
     values = c("$500", "$1k", "$1.5k", "2k", "$2.5k"),
     colors = c("#2b83ba", "#abdda4", "#ffffbf", "#fdae61", "#d7191c")
   )
