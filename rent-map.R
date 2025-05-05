@@ -1,5 +1,6 @@
 library(tidyverse)
 library(tidycensus)
+library(tigris)
 library(mapgl)
 library(sf)
 
@@ -26,6 +27,11 @@ median_rent_county <- get_acs(
   geometry = TRUE,
   resolution = "5m",
 )
+
+austin <- places(state = "TX")%>%
+  filter(str_detect(NAME, "Austin"))
+
+austin_boundary <- st_cast(austin, "MULTILINESTRING")
 
 
 # Format the popups
@@ -66,7 +72,7 @@ rent_map <- maplibre(
     tolerance = 0
   ) |> 
   add_fill_layer(
-    id = "fill-layer",
+    id = "Census Tracts",
     source = median_rent,
     fill_color = interpolate(
       column = "estimate",
@@ -84,7 +90,7 @@ rent_map <- maplibre(
     popup = "popup"
   ) |> 
   add_fill_layer(
-    id = "county-fill-layer",
+    id = "Counties",
     source = median_rent_county,
     fill_color = interpolate(
       column = "estimate",
@@ -102,9 +108,26 @@ rent_map <- maplibre(
     popup = "popup"
   ) |>
   add_continuous_legend(
-    "Median gross rent",
+    "Median gross rent (2023)",
     values = c("$500", "$1k", "$1.5k", "2k", "$2.5k"),
     colors = c("#2b83ba", "#abdda4", "#ffffbf", "#fdae61", "#d7191c")
+  ) |>
+  add_line_layer(
+    id = "Austin City Boundary",
+    source = austin_boundary,
+    line_color = "#2a2a2a",
+    line_width = 2
+  ) |>
+  add_layers_control(
+    position = "bottom-left",
+    layers = NULL,
+    collapsible = TRUE,
+    use_icon = TRUE,
+    background_color = NULL,
+    active_color = NULL,
+    hover_color = NULL,
+    active_text_color = NULL,
+    inactive_text_color = NULL
   )
 
 htmlwidgets::saveWidget(rent_map, "index.html", selfcontained = FALSE)
