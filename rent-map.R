@@ -63,7 +63,7 @@ median_rent_county$hover <- county_hover_content
 rent_map <- maplibre(
   style = carto_style("positron"),
   center = c(-97.72888, 30.27567),
-  zoom = 7.5
+  zoom = 8
 ) |>
   set_projection("globe") |> 
   add_source( 
